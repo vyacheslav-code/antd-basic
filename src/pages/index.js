@@ -1,18 +1,31 @@
-import styles from './index.css';
+import { connect } from 'dva';
+import ProductList from '../components/ProductList';
+import AddProductForm from '../components/AddProductForm';
 
 
-export default function() {
+const Products = ({ dispatch, products }) => {
+  function handleDelete(id) {
+    dispatch({
+      type: 'products/delete',
+      payload: id,
+    });
+  }
+  function handleAdd(name) {
+    dispatch({
+      type: 'products/add',
+      payload: name,
+    });
+  }
+
   return (
-    <div className={styles.normal}>
-      <div className={styles.welcome} />
-      <ul className={styles.list}>
-        <li>To get started, edit <code>src/pages/index.js</code> and save to reload.</li>
-        <li>
-          <a href="https://umijs.org/guide/getting-started.html">
-            Getting Started
-          </a>
-        </li>
-      </ul>
+    <div>
+      <h2>List of Products</h2>
+      <AddProductForm handleAdd={handleAdd}/>
+      <ProductList onDelete={handleDelete} products={products} />
     </div>
   );
-}
+};
+
+export default connect(({ products }) => ({
+  products,
+}))(Products);
